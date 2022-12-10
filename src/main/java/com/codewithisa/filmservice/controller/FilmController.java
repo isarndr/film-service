@@ -48,10 +48,10 @@ public class FilmController {
         return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
     }
 
-    @GetMapping("/schedule-and-seats/{filmCode}/{scheduleId}")
+    @GetMapping("/schedule-and-seats/")
     public ResponseEntity<ResponseTemplateFSSVO> findFilmWithScheduleAndSeats(
-            @PathVariable("filmCode") Long filmCode,
-            @PathVariable("scheduleId") Long scheduleId){
+            @RequestParam("filmCode") Long filmCode,
+            @RequestParam("scheduleId") Long scheduleId){
         log.info("Inside findFilmWithScheduleAndSeats of FilmController");
         return new ResponseEntity<ResponseTemplateFSSVO>(filmService.findFilmWithScheduleAndSeats(filmCode, scheduleId),
                 HttpStatus.OK);
