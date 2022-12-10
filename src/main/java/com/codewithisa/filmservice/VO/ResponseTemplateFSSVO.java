@@ -7,11 +7,12 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-// FS stands for Film Schedule
+// FSS stands for Film Schedule Seat
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ResponseTemplateFSVO {
+public class ResponseTemplateFSSVO {
     private Films film;
-    private List<Schedules> schedulesList;
+    private Schedules schedule;
+    private List<Seats> seatsList;
 }

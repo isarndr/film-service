@@ -1,5 +1,6 @@
 package com.codewithisa.filmservice.controller;
 
+import com.codewithisa.filmservice.VO.ResponseTemplateFSSVO;
 import com.codewithisa.filmservice.VO.ResponseTemplateFSVO;
 import com.codewithisa.filmservice.entity.Films;
 import com.codewithisa.filmservice.service.FilmService;
@@ -41,6 +42,15 @@ public class FilmController {
     public ResponseEntity<ResponseTemplateFSVO> findFilmWithSchedules(@PathVariable("filmCode") Long filmCode){
         log.info("Inside findFilmWithSchedules of FilmController");
         return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
+    }
+
+    @GetMapping("/schedule-and-seats/{filmCode}/{scheduleId}")
+    public ResponseEntity<ResponseTemplateFSSVO> findFilmWithScheduleAndSeats(
+            @PathVariable("filmCode") Long filmCode,
+            @PathVariable("scheduleId") Long scheduleId){
+        log.info("Inside findFilmWithScheduleAndSeats of FilmController");
+        return new ResponseEntity<ResponseTemplateFSSVO>(filmService.findFilmWithScheduleAndSeats(filmCode, scheduleId),
+                HttpStatus.OK);
     }
 }
 

@@ -1,7 +1,9 @@
 package com.codewithisa.filmservice.service;
 
+import com.codewithisa.filmservice.VO.ResponseTemplateFSSVO;
 import com.codewithisa.filmservice.VO.ResponseTemplateFSVO;
 import com.codewithisa.filmservice.VO.Schedules;
+import com.codewithisa.filmservice.VO.Seats;
 import com.codewithisa.filmservice.entity.Films;
 import com.codewithisa.filmservice.repository.FilmRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,29 @@ public class FilmServiceImpl implements FilmService{
                 new ParameterizedTypeReference<List<Schedules>>(){});
 
         vo.setSchedulesList(schedulesList.getBody());
+        vo.setFilm(film);
+
+        return vo;
+    }
+
+    @Override
+    public ResponseTemplateFSSVO findFilmWithScheduleAndSeats(Long filmCode, Long scheduleId) {
+        log.info("Inside findFilmWithSchedulesAndSeats of FilmServiceImpl");
+        ResponseTemplateFSSVO vo = new ResponseTemplateFSSVO();
+        Films film = filmRepository.findFilmByFilmCode(filmCode);
+
+        Schedules schedule = restTemplate.getForObject(
+                "http://localhost:9003/schedules/" + scheduleId,
+                Schedules.class);
+
+        ResponseEntity<List<Seats>> seatsList = restTemplate.exchange(
+                "http://localhost:9004/seats/" + scheduleId,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Seats>>(){});
+
+        vo.setSchedule(schedule);
+        vo.setSeatsList(seatsList.getBody());
         vo.setFilm(film);
 
         return vo;
