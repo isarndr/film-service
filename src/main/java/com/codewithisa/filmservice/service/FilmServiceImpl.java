@@ -6,8 +6,13 @@ import com.codewithisa.filmservice.entity.Films;
 import com.codewithisa.filmservice.repository.FilmRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+
+import java.util.List;
 
 @Slf4j
 @Service
@@ -34,10 +39,13 @@ public class FilmServiceImpl implements FilmService{
         ResponseTemplateFSVO vo = new ResponseTemplateFSVO();
         Films film = filmRepository.findFilmByFilmCode(filmCode);
 
-        Schedules schedules = restTemplate.getForObject("http://localhost:9003/schedules/" + 294,
-                Schedules.class);
+        ResponseEntity<List<Schedules>> schedulesList = restTemplate.exchange(
+                "http://localhost:9003/schedules/schedules-by-film-code/" + filmCode,
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<Schedules>>(){});
 
-        vo.setSchedules(schedules);
+        vo.setSchedulesList(schedulesList.getBody());
         vo.setFilm(film);
 
         return vo;
