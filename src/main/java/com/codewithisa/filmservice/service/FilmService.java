@@ -11,4 +11,6 @@ public interface FilmService {
     Films findFilmByFilmCode(Long filmCode);
     ResponseTemplateFSVO findFilmWithSchedules(Long filmCode);
     ResponseTemplateFSSVO findFilmWithScheduleAndSeats(Long filmCode, Long scheduleId);
+    Films updateFilmName(Films film, Long filmCode);
+    void deleteFilm(Long filmCode);
 }

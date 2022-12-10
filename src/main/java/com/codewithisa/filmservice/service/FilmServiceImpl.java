@@ -75,4 +75,20 @@ public class FilmServiceImpl implements FilmService{
 
         return vo;
     }
+
+    @Override
+    public Films updateFilmName(Films film, Long filmCode) {
+        log.info("Inside updateFilmName of FilmServiceImpl");
+        Films existingFilm = filmRepository.findFilmByFilmCode(filmCode);
+        existingFilm.setFilmName(film.getFilmName());
+        filmRepository.save(existingFilm);
+        log.info("film name is successfully updated");
+        return existingFilm;
+    }
+
+    @Override
+    public void deleteFilm(Long filmCode) {
+        log.info("Inside deleteFilm of FilmServiceImpl");
+        filmRepository.deleteFilmByFilmCode(filmCode);
+    }
 }
