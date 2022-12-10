@@ -91,4 +91,10 @@ public class FilmServiceImpl implements FilmService{
         log.info("Inside deleteFilm of FilmServiceImpl");
         filmRepository.deleteFilmByFilmCode(filmCode);
     }
+
+    @Override
+    public List<Films> findFilmsYangSedangTayang() {
+        log.info("Inside findFilmsYangSedangTayang of FilmServiceImpl");
+        return filmRepository.findFilmsYangSedangTayang();
+    }
 }

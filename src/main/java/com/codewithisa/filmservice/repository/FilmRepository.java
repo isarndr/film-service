@@ -25,5 +25,11 @@ public interface FilmRepository extends JpaRepository<Films,Long> {
             value = "delete from films where film_code = :filmCode"
     )
     void deleteFilmByFilmCode(@Param("filmCode") Long filmCode);
+
+    @Query(
+            nativeQuery = true,
+            value = "select * from films where sedang_tayang = true"
+    )
+    List<Films> findFilmsYangSedangTayang();
 }
 

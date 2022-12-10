@@ -78,5 +78,11 @@ public class FilmController {
         log.info("Film deleted");
         return new ResponseEntity<>("Film deleted",HttpStatus.OK);
     }
+
+    @Operation(summary = "untuk menampilkan semua film yang sedang tayang")
+    @GetMapping("/sedang-tayang")
+    public List<Films> getAllFilmYangSedangTayang(){
+        return filmService.findFilmsYangSedangTayang();
+    }
 }
 

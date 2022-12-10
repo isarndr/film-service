@@ -5,6 +5,8 @@ import com.codewithisa.filmservice.VO.ResponseTemplateFSVO;
 import com.codewithisa.filmservice.entity.Films;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public interface FilmService {
     Films saveFilm(Films film);
@@ -13,4 +15,5 @@ public interface FilmService {
     ResponseTemplateFSSVO findFilmWithScheduleAndSeats(Long filmCode, Long scheduleId);
     Films updateFilmName(Films film, Long filmCode);
     void deleteFilm(Long filmCode);
+    List<Films> findFilmsYangSedangTayang();
 }
