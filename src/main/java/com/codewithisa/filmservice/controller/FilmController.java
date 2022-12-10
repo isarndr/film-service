@@ -48,7 +48,7 @@ public class FilmController {
         return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
     }
 
-    @GetMapping("/schedule-and-seats/")
+    @GetMapping("/film-with-schedule-and-seats/")
     public ResponseEntity<ResponseTemplateFSSVO> findFilmWithScheduleAndSeats(
             @RequestParam("filmCode") Long filmCode,
             @RequestParam("scheduleId") Long scheduleId){
