@@ -42,7 +42,7 @@ public class FilmServiceImpl implements FilmService{
         Films film = filmRepository.findFilmByFilmCode(filmCode);
 
         ResponseEntity<List<Schedules>> schedulesList = restTemplate.exchange(
-                "https://schedule-service-production.up.railway.app/schedules/find-schedules-by-film-code/" + filmCode,
+                "https://schedule-service-production-12cd.up.railway.app/schedules/find-schedules-by-film-code/" + filmCode,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Schedules>>(){});
@@ -60,11 +60,11 @@ public class FilmServiceImpl implements FilmService{
         Films film = filmRepository.findFilmByFilmCode(filmCode);
 
         Schedules schedule = restTemplate.getForObject(
-                "https://schedule-service-production.up.railway.app/schedules/find-schedule-by-schedule-id/" + scheduleId,
+                "https://schedule-service-production-12cd.up.railway.app/schedules/find-schedule-by-schedule-id/" + scheduleId,
                 Schedules.class);
 
         ResponseEntity<List<Seats>> seatsList = restTemplate.exchange(
-                "https://seat-service-production.up.railway.app/seats/find-seats-by-schedule-id/" + scheduleId,
+                "https://seat-service-production-3b8e.up.railway.app/seats/find-seats-by-schedule-id/" + scheduleId,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Seats>>(){});
