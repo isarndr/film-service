@@ -26,7 +26,7 @@ public class FilmController {
     @Operation(
             summary = "untuk menambahkan film baru"
     )
-    @PostMapping("/")
+    @PostMapping("/add-film")
     public ResponseEntity<Films> saveFilm(@RequestBody Films film){
         log.info("Inside saveFilm of FilmController");
         return new ResponseEntity<>(filmService.saveFilm(film), HttpStatus.CREATED);
@@ -35,20 +35,20 @@ public class FilmController {
     @Operation(
             summary = "untuk mengambil film"
     )
-    @GetMapping("/{filmCode}")
+    @GetMapping("/find-film-by-film-code/{filmCode}")
     public ResponseEntity<Films> findFilmByFilmCode(@PathVariable("filmCode") Long filmCode){
         log.info("Inside findFilmByFilmCode of FilmController");
         return new ResponseEntity<>(filmService.findFilmByFilmCode(filmCode), HttpStatus.OK);
     }
 
     // FS for Films and Schedules
-    @GetMapping("/film-with-schedules/{filmCode}")
+    @GetMapping("/find-film-with-schedules/{filmCode}")
     public ResponseEntity<ResponseTemplateFSVO> findFilmWithSchedules(@PathVariable("filmCode") Long filmCode){
         log.info("Inside findFilmWithSchedules of FilmController");
         return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
     }
 
-    @GetMapping("/film-with-schedule-and-seats/")
+    @GetMapping("/find-film-with-schedule-and-seats/")
     public ResponseEntity<ResponseTemplateFSSVO> findFilmWithScheduleAndSeats(
             @RequestParam("filmCode") Long filmCode,
             @RequestParam("scheduleId") Long scheduleId){
@@ -60,7 +60,7 @@ public class FilmController {
     @Operation(
             summary = "untuk mengubah nama film yang sudah terdaftar"
     )
-    @PutMapping("update-film-name/{filmCode}")
+    @PutMapping("update-film-name-by-film-code/{filmCode}")
     public ResponseEntity<Films> updateFilmName(
             @Schema(example = "1") @PathVariable("filmCode") Long filmCode, @RequestBody Films film)
     {
@@ -71,7 +71,7 @@ public class FilmController {
     @Operation(
             summary = "untuk menghapus film"
     )
-    @DeleteMapping("/{filmCode}")
+    @DeleteMapping("/delete-film-by-film-code/{filmCode}")
     public ResponseEntity<String> deleteFilmByFilmCode(@Schema(example = "1") @PathVariable("filmCode") Long filmCode){
         log.info("Inside deleteFilmByFilmCode of FilmController");
         filmService.deleteFilm(filmCode);
@@ -80,13 +80,13 @@ public class FilmController {
     }
 
     @Operation(summary = "untuk menampilkan semua film yang sedang tayang")
-    @GetMapping("/sedang-tayang")
+    @GetMapping("/get-all-film-yang-sedang-tayang")
     public List<Films> getAllFilmYangSedangTayang(){
         log.info("Inside getAllFilmYangSedangTayang of FilmController");
         return filmService.findFilmsYangSedangTayang();
     }
 
-    @GetMapping("/film-name/{filmName}")
+    @GetMapping("/find-film-by-film-name/{filmName}")
     public ResponseEntity<Films> findFilmByFilmName(@PathVariable("filmName") String filmName){
         log.info("Inside findFilmByFilmName of FilmController");
         return new ResponseEntity<>(filmService.findFilmByFilmName(filmName), HttpStatus.OK);
