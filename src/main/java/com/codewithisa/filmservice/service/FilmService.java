@@ -16,4 +16,5 @@ public interface FilmService {
     Films updateFilmName(Films film, Long filmCode);
     void deleteFilm(Long filmCode);
     List<Films> findFilmsYangSedangTayang();
+    Films findFilmByFilmName(String filmName);
 }

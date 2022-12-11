@@ -82,7 +82,14 @@ public class FilmController {
     @Operation(summary = "untuk menampilkan semua film yang sedang tayang")
     @GetMapping("/sedang-tayang")
     public List<Films> getAllFilmYangSedangTayang(){
+        log.info("Inside getAllFilmYangSedangTayang of FilmController");
         return filmService.findFilmsYangSedangTayang();
+    }
+
+    @GetMapping("/film-name/{filmName}")
+    public ResponseEntity<Films> findFilmByFilmName(@PathVariable("filmName") String filmName){
+        log.info("Inside findFilmByFilmName of FilmController");
+        return new ResponseEntity<>(filmService.findFilmByFilmName(filmName), HttpStatus.OK);
     }
 }
 

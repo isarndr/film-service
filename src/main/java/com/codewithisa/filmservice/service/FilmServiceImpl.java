@@ -97,4 +97,10 @@ public class FilmServiceImpl implements FilmService{
         log.info("Inside findFilmsYangSedangTayang of FilmServiceImpl");
         return filmRepository.findFilmsYangSedangTayang();
     }
+
+    @Override
+    public Films findFilmByFilmName(String filmName) {
+        log.info("Inside findFilmByFilmName of FilmServiceImpl");
+        return filmRepository.findFilmByFilmName(filmName);
+    }
 }
