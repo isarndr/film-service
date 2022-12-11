@@ -64,7 +64,7 @@ public class FilmServiceImpl implements FilmService{
                 Schedules.class);
 
         ResponseEntity<List<Seats>> seatsList = restTemplate.exchange(
-                "http://localhost:9004/seats/find-seats-by-schedule-id" + scheduleId,
+                "http://localhost:9004/seats/find-seats-by-schedule-id/" + scheduleId,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Seats>>(){});
