@@ -29,6 +29,11 @@ public class FilmController {
     @PostMapping("/add-film")
     public ResponseEntity<Films> saveFilm(@RequestBody Films film){
         log.info("Inside saveFilm of FilmController");
+        Boolean filmNameExists = filmService.existsByFilmName(film.getFilmName());
+        if(filmNameExists){
+            log.error("film name is already in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(filmService.saveFilm(film), HttpStatus.CREATED);
     }
 
