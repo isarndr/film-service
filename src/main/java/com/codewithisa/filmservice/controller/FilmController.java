@@ -109,6 +109,11 @@ public class FilmController {
     @DeleteMapping("/delete-film-by-film-code/{filmCode}")
     public ResponseEntity<String> deleteFilmByFilmCode(@Schema(example = "1") @PathVariable("filmCode") Long filmCode){
         log.info("Inside deleteFilmByFilmCode of FilmController");
+        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
+        if(!filmCodeExists){
+            log.error("film code is not exist");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         filmService.deleteFilm(filmCode);
         log.info("Film deleted");
         return new ResponseEntity<>("Film deleted",HttpStatus.OK);
