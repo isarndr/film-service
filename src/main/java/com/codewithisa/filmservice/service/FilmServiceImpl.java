@@ -103,4 +103,14 @@ public class FilmServiceImpl implements FilmService{
         log.info("Inside findFilmByFilmName of FilmServiceImpl");
         return filmRepository.findFilmByFilmName(filmName);
     }
+
+    @Override
+    public Boolean existsByFilmCode(Long filmCode) {
+        return filmRepository.existsById(filmCode);
+    }
+
+    @Override
+    public Boolean existsByFilmName(String filmName) {
+        return filmRepository.existsByFilmName(filmName);
+    }
 }

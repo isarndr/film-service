@@ -37,5 +37,8 @@ public interface FilmRepository extends JpaRepository<Films,Long> {
             value = "select * from films where film_name = :filmName"
     )
     Films findFilmByFilmName(@Param("filmName") String filmName);
+
+    Boolean existsByFilmName(String filmName);
+
 }
 

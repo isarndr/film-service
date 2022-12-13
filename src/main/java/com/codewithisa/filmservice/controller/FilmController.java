@@ -65,6 +65,16 @@ public class FilmController {
             @Schema(example = "1") @PathVariable("filmCode") Long filmCode, @RequestBody Films film)
     {
         log.info("Inside updateFilmName of FilmController");
+        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
+        if(!filmCodeExists){
+            log.error("film code is not exist");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        Boolean filmNameExists = filmService.existsByFilmName(film.getFilmName());
+        if(filmNameExists){
+            log.error("film name is already in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(filmService.updateFilmName(film, filmCode),HttpStatus.OK);
     }
 

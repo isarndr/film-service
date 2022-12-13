@@ -17,4 +17,7 @@ public interface FilmService {
     void deleteFilm(Long filmCode);
     List<Films> findFilmsYangSedangTayang();
     Films findFilmByFilmName(String filmName);
+
+    Boolean existsByFilmCode(Long filmCode);
+    Boolean existsByFilmName(String filmName);
 }
