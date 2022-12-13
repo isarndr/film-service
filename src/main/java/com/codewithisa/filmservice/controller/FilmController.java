@@ -119,6 +119,11 @@ public class FilmController {
     @GetMapping("/find-film-by-film-name/{filmName}")
     public ResponseEntity<Films> findFilmByFilmName(@PathVariable("filmName") String filmName){
         log.info("Inside findFilmByFilmName of FilmController");
+        Boolean filmNameExists = filmService.existsByFilmName(filmName);
+        if(!filmNameExists){
+            log.error("film name is not exist in the database");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<>(filmService.findFilmByFilmName(filmName), HttpStatus.OK);
     }
 }
