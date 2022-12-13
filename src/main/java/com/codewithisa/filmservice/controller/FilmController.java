@@ -50,6 +50,11 @@ public class FilmController {
     @GetMapping("/find-film-with-schedules/{filmCode}")
     public ResponseEntity<ResponseTemplateFSVO> findFilmWithSchedules(@PathVariable("filmCode") Long filmCode){
         log.info("Inside findFilmWithSchedules of FilmController");
+        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
+        if(!filmCodeExists){
+            log.error("film code is not exist");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
     }
 
@@ -58,7 +63,17 @@ public class FilmController {
             @RequestParam("filmCode") Long filmCode,
             @RequestParam("scheduleId") Long scheduleId){
         log.info("Inside findFilmWithScheduleAndSeats of FilmController");
-        return new ResponseEntity<ResponseTemplateFSSVO>(filmService.findFilmWithScheduleAndSeats(filmCode, scheduleId),
+        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
+        if(!filmCodeExists){
+            log.error("film code is not exist");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        ResponseTemplateFSSVO responseTemplateFSSVO = filmService.findFilmWithScheduleAndSeats(filmCode, scheduleId);
+        if(responseTemplateFSSVO.getSchedule()==null){
+            log.error("schedule id is not exist");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<ResponseTemplateFSSVO>(responseTemplateFSSVO,
                 HttpStatus.OK);
     }
 
