@@ -8,6 +8,7 @@ import com.codewithisa.filmservice.entity.Film;
 import com.codewithisa.filmservice.repository.FilmRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,15 @@ public class FilmServiceImpl implements FilmService{
 
     @Autowired
     RestTemplate restTemplate;
+
+    @Value("${scheduleByFilmCode}")
+    private String scheduleByFilmCode;
+
+    @Value("${scheduleById}")
+    private String scheduleById;
+
+    @Value("${findSeatsByScheduleId}")
+    private String findSeatsByScheduleId;
 
     @Override
     public Film saveFilm(Film film) throws Exception{
@@ -59,7 +69,7 @@ public class FilmServiceImpl implements FilmService{
         Film film = filmRepository.findFilmByFilmCode(filmCode);
 
         ResponseEntity<List<Schedule>> schedulesList = restTemplate.exchange(
-                "http://localhost:9003/schedule/by-film-code/" + filmCode,
+                scheduleByFilmCode + filmCode,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Schedule>>(){});
@@ -83,11 +93,11 @@ public class FilmServiceImpl implements FilmService{
         Film film = filmRepository.findFilmByFilmCode(filmCode);
 
         Schedule schedule = restTemplate.getForObject(
-                "http://localhost:9003/schedule/" + scheduleId,
+                scheduleById + scheduleId,
                 Schedule.class);
 
         ResponseEntity<List<Seat>> seatsList = restTemplate.exchange(
-                "http://localhost:9004/seat/find-seats-by-schedule-id/" + scheduleId,
+                findSeatsByScheduleId + scheduleId,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Seat>>(){});
