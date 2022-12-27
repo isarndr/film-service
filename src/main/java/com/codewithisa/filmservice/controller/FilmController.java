@@ -47,8 +47,8 @@ public class FilmController {
         }
     }
 
-    // FS for Film and Schedules
-    @GetMapping("/find-film-with-schedules/{filmCode}")
+    // FS for Film and Schedule
+    @GetMapping("/with-schedules/{filmCode}")
     public ResponseEntity<?> findFilmWithSchedules(@PathVariable("filmCode") Long filmCode){
         try {
             return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
@@ -57,7 +57,7 @@ public class FilmController {
         }
     }
 
-    @GetMapping("/find-film-with-schedule-and-seats/")
+    @GetMapping("/with-schedule-and-seats/")
     public ResponseEntity<?> findFilmWithScheduleAndSeats(
             @RequestParam("filmCode") Long filmCode,
             @RequestParam("scheduleId") Long scheduleId){
@@ -106,7 +106,7 @@ public class FilmController {
     }
 
     @Operation(summary = "untuk menampilkan semua film yang sedang tayang")
-    @GetMapping("/get-all-film-yang-sedang-tayang")
+    @GetMapping("/yang-sedang-tayang")
     public List<Film> getAllFilmYangSedangTayang(){
         return filmService.findFilmsYangSedangTayang();
     }

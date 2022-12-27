@@ -2,8 +2,8 @@ package com.codewithisa.filmservice.service;
 
 import com.codewithisa.filmservice.VO.ResponseTemplateFSSVO;
 import com.codewithisa.filmservice.VO.ResponseTemplateFSVO;
-import com.codewithisa.filmservice.VO.Schedules;
-import com.codewithisa.filmservice.VO.Seats;
+import com.codewithisa.filmservice.VO.Schedule;
+import com.codewithisa.filmservice.VO.Seat;
 import com.codewithisa.filmservice.entity.Film;
 import com.codewithisa.filmservice.repository.FilmRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -58,13 +58,13 @@ public class FilmServiceImpl implements FilmService{
         ResponseTemplateFSVO vo = new ResponseTemplateFSVO();
         Film film = filmRepository.findFilmByFilmCode(filmCode);
 
-        ResponseEntity<List<Schedules>> schedulesList = restTemplate.exchange(
+        ResponseEntity<List<Schedule>> schedulesList = restTemplate.exchange(
                 "http://localhost:9003/schedule/by-film-code/" + filmCode,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<Schedules>>(){});
+                new ParameterizedTypeReference<List<Schedule>>(){});
 
-        vo.setSchedulesList(schedulesList.getBody());
+        vo.setScheduleList(schedulesList.getBody());
         vo.setFilm(film);
 
         return vo;
@@ -82,18 +82,18 @@ public class FilmServiceImpl implements FilmService{
         ResponseTemplateFSSVO vo = new ResponseTemplateFSSVO();
         Film film = filmRepository.findFilmByFilmCode(filmCode);
 
-        Schedules schedule = restTemplate.getForObject(
+        Schedule schedule = restTemplate.getForObject(
                 "http://localhost:9003/schedule/" + scheduleId,
-                Schedules.class);
+                Schedule.class);
 
-        ResponseEntity<List<Seats>> seatsList = restTemplate.exchange(
+        ResponseEntity<List<Seat>> seatsList = restTemplate.exchange(
                 "http://localhost:9004/seat/find-seats-by-schedule-id/" + scheduleId,
                 HttpMethod.GET,
                 null,
-                new ParameterizedTypeReference<List<Seats>>(){});
+                new ParameterizedTypeReference<List<Seat>>(){});
 
         vo.setSchedule(schedule);
-        vo.setSeatsList(seatsList.getBody());
+        vo.setSeatList(seatsList.getBody());
         vo.setFilm(film);
 
         return vo;

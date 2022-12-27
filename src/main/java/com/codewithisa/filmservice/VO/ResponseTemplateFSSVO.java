@@ -13,6 +13,6 @@ import java.util.List;
 @NoArgsConstructor
 public class ResponseTemplateFSSVO {
     private Film film;
-    private Schedules schedule;
-    private List<Seats> seatsList;
+    private Schedule schedule;
+    private List<Seat> seatList;
 }

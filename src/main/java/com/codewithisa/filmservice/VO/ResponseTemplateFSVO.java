@@ -13,5 +13,5 @@ import java.util.List;
 @NoArgsConstructor
 public class ResponseTemplateFSVO {
     private Film film;
-    private List<Schedules> schedulesList;
+    private List<Schedule> scheduleList;
 }

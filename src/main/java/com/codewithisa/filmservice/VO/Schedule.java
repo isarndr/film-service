@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Schedules {
+public class Schedule {
 
     @Schema(example = "1")
     private Long scheduleId;
