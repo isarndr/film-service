@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -60,7 +59,7 @@ public class FilmServiceImpl implements FilmService{
         Film film = filmRepository.findFilmByFilmCode(filmCode);
 
         ResponseEntity<List<Schedules>> schedulesList = restTemplate.exchange(
-                "https://schedule-service-production-12cd.up.railway.app/schedules/find-schedules-by-film-code/" + filmCode,
+                "http://localhost:9003/schedule/by-film-code/" + filmCode,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Schedules>>(){});
@@ -84,11 +83,11 @@ public class FilmServiceImpl implements FilmService{
         Film film = filmRepository.findFilmByFilmCode(filmCode);
 
         Schedules schedule = restTemplate.getForObject(
-                "https://schedule-service-production-12cd.up.railway.app/schedules/find-schedule-by-schedule-id/" + scheduleId,
+                "http://localhost:9003/schedule/" + scheduleId,
                 Schedules.class);
 
         ResponseEntity<List<Seats>> seatsList = restTemplate.exchange(
-                "https://seat-service-production-3b8e.up.railway.app/seats/find-seats-by-schedule-id/" + scheduleId,
+                "http://localhost:9004/seat/find-seats-by-schedule-id/" + scheduleId,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<List<Seats>>(){});
