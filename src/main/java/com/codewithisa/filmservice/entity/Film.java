@@ -13,7 +13,8 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class Films {
+@Table(name = "films")
+public class Film {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

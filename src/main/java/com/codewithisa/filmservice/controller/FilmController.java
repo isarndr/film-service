@@ -2,11 +2,10 @@ package com.codewithisa.filmservice.controller;
 
 import com.codewithisa.filmservice.VO.ResponseTemplateFSSVO;
 import com.codewithisa.filmservice.VO.ResponseTemplateFSVO;
-import com.codewithisa.filmservice.entity.Films;
+import com.codewithisa.filmservice.entity.Film;
 import com.codewithisa.filmservice.service.FilmService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,123 +17,107 @@ import java.util.List;
 
 @Slf4j
 @RestController
-@RequestMapping("/films")
+@RequestMapping("/film")
 public class FilmController {
+
     @Autowired
     FilmService filmService;
 
     @Operation(
             summary = "untuk menambahkan film baru"
     )
-    @PostMapping("/add-film")
-    public ResponseEntity<Films> saveFilm(@RequestBody Films film){
-        log.info("Inside saveFilm of FilmController");
-        Boolean filmNameExists = filmService.existsByFilmName(film.getFilmName());
-        if(filmNameExists){
-            log.error("film name is already in the database");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @PostMapping("/")
+    public ResponseEntity<?> saveFilm(@RequestBody Film film){
+        try {
+            return new ResponseEntity<>(filmService.saveFilm(film), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(filmService.saveFilm(film), HttpStatus.CREATED);
     }
 
     @Operation(
             summary = "untuk mengambil film"
     )
-    @GetMapping("/find-film-by-film-code/{filmCode}")
-    public ResponseEntity<Films> findFilmByFilmCode(@PathVariable("filmCode") Long filmCode){
-        log.info("Inside findFilmByFilmCode of FilmController");
-        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
-        if(!filmCodeExists){
-            log.error("film code is not exist");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @GetMapping("/{filmCode}")
+    public ResponseEntity<?> findFilmByFilmCode(@PathVariable("filmCode") Long filmCode){
+        try {
+            return new ResponseEntity<>(filmService.findFilmByFilmCode(filmCode), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(filmService.findFilmByFilmCode(filmCode), HttpStatus.OK);
     }
 
-    // FS for Films and Schedules
+    // FS for Film and Schedules
     @GetMapping("/find-film-with-schedules/{filmCode}")
-    public ResponseEntity<ResponseTemplateFSVO> findFilmWithSchedules(@PathVariable("filmCode") Long filmCode){
-        log.info("Inside findFilmWithSchedules of FilmController");
-        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
-        if(!filmCodeExists){
-            log.error("film code is not exist");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    public ResponseEntity<?> findFilmWithSchedules(@PathVariable("filmCode") Long filmCode){
+        try {
+            return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<ResponseTemplateFSVO>(filmService.findFilmWithSchedules(filmCode), HttpStatus.OK);
     }
 
     @GetMapping("/find-film-with-schedule-and-seats/")
-    public ResponseEntity<ResponseTemplateFSSVO> findFilmWithScheduleAndSeats(
+    public ResponseEntity<?> findFilmWithScheduleAndSeats(
             @RequestParam("filmCode") Long filmCode,
             @RequestParam("scheduleId") Long scheduleId){
-        log.info("Inside findFilmWithScheduleAndSeats of FilmController");
-        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
-        if(!filmCodeExists){
-            log.error("film code is not exist");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        ResponseTemplateFSSVO responseTemplateFSSVO = null;
+
+        try {
+            responseTemplateFSSVO = filmService.findFilmWithScheduleAndSeats(filmCode, scheduleId);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        ResponseTemplateFSSVO responseTemplateFSSVO = filmService.findFilmWithScheduleAndSeats(filmCode, scheduleId);
+
         if(responseTemplateFSSVO.getSchedule()==null){
             log.error("schedule id is not exist");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>("schedule id is not exist", HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<ResponseTemplateFSSVO>(responseTemplateFSSVO,
-                HttpStatus.OK);
+
+        return new ResponseEntity<ResponseTemplateFSSVO>(responseTemplateFSSVO, HttpStatus.OK);
     }
 
     @Operation(
             summary = "untuk mengubah nama film yang sudah terdaftar"
     )
-    @PutMapping("update-film-name-by-film-code/{filmCode}")
-    public ResponseEntity<Films> updateFilmName(
-            @Schema(example = "1") @PathVariable("filmCode") Long filmCode, @RequestBody Films film)
+    @PutMapping("/{filmCode}")
+    public ResponseEntity<?> updateFilmName(
+            @Schema(example = "1") @PathVariable("filmCode") Long filmCode, @RequestBody Film film)
     {
-        log.info("Inside updateFilmName of FilmController");
-        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
-        if(!filmCodeExists){
-            log.error("film code is not exist");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            return new ResponseEntity<>(filmService.updateFilmName(film, filmCode),HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        Boolean filmNameExists = filmService.existsByFilmName(film.getFilmName());
-        if(filmNameExists){
-            log.error("film name is already in the database");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return new ResponseEntity<>(filmService.updateFilmName(film, filmCode),HttpStatus.OK);
     }
 
     @Operation(
             summary = "untuk menghapus film"
     )
-    @DeleteMapping("/delete-film-by-film-code/{filmCode}")
+    @DeleteMapping("/{filmCode}")
     public ResponseEntity<String> deleteFilmByFilmCode(@Schema(example = "1") @PathVariable("filmCode") Long filmCode){
-        log.info("Inside deleteFilmByFilmCode of FilmController");
-        Boolean filmCodeExists = filmService.existsByFilmCode(filmCode);
-        if(!filmCodeExists){
-            log.error("film code is not exist");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        try {
+            filmService.deleteFilm(filmCode);
+            return new ResponseEntity<>("Film deleted",HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
-        filmService.deleteFilm(filmCode);
-        log.info("Film deleted");
-        return new ResponseEntity<>("Film deleted",HttpStatus.OK);
     }
 
     @Operation(summary = "untuk menampilkan semua film yang sedang tayang")
     @GetMapping("/get-all-film-yang-sedang-tayang")
-    public List<Films> getAllFilmYangSedangTayang(){
-        log.info("Inside getAllFilmYangSedangTayang of FilmController");
+    public List<Film> getAllFilmYangSedangTayang(){
         return filmService.findFilmsYangSedangTayang();
     }
 
-    @GetMapping("/find-film-by-film-name/{filmName}")
-    public ResponseEntity<Films> findFilmByFilmName(@PathVariable("filmName") String filmName){
-        log.info("Inside findFilmByFilmName of FilmController");
-        Boolean filmNameExists = filmService.existsByFilmName(filmName);
-        if(!filmNameExists){
-            log.error("film name is not exist in the database");
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @GetMapping("/by-film-name/{filmName}")
+    public ResponseEntity<?> findFilmByFilmName(@PathVariable("filmName") String filmName){
+        try {
+            return new ResponseEntity<>(filmService.findFilmByFilmName(filmName), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(filmService.findFilmByFilmName(filmName), HttpStatus.OK);
     }
 }
 

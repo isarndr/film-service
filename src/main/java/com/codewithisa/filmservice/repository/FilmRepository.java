@@ -1,6 +1,6 @@
 package com.codewithisa.filmservice.repository;
 
-import com.codewithisa.filmservice.entity.Films;
+import com.codewithisa.filmservice.entity.Film;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,12 +11,12 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Repository
-public interface FilmRepository extends JpaRepository<Films,Long> {
+public interface FilmRepository extends JpaRepository<Film,Long> {
     @Query(
             nativeQuery = true,
             value = "select * from films where film_code=:filmCode"
     )
-    Films findFilmByFilmCode(@Param("filmCode") Long filmCode);
+    Film findFilmByFilmCode(@Param("filmCode") Long filmCode);
 
     @Transactional
     @Modifying
@@ -30,13 +30,13 @@ public interface FilmRepository extends JpaRepository<Films,Long> {
             nativeQuery = true,
             value = "select * from films where sedang_tayang = true"
     )
-    List<Films> findFilmsYangSedangTayang();
+    List<Film> findFilmsYangSedangTayang();
 
     @Query(
             nativeQuery = true,
             value = "select * from films where film_name = :filmName"
     )
-    Films findFilmByFilmName(@Param("filmName") String filmName);
+    Film findFilmByFilmName(@Param("filmName") String filmName);
 
     Boolean existsByFilmName(String filmName);
 
